@@ -1,14 +1,21 @@
 /**
  * Where a spell showed up for the first time.
  */
-export type FirstAppearance = "book" | "movie" | "videogame";
+const MAX_DESCRIPTION_LENGTH = 120;
+export type FirstAppearance = "book" | "movie" | "videogame" | "series";
 
-export const FIRST_APPEARANCES: FirstAppearance[] = ["book", "movie", "videogame"];
+export const FIRST_APPEARANCES: FirstAppearance[] = [
+  "book",
+  "movie",
+  "videogame",
+  "series",
+];
 
 export const ORIGIN_LABELS: Record<FirstAppearance, string> = {
   book: "Libro",
   movie: "Película",
   videogame: "Videojuego",
+  series: "Serie",
 };
 
 /**
@@ -30,21 +37,25 @@ class Spell {
    * @param {FirstAppearance} firstAppearance - Where the spell appeared first.
    * @throws {Error} Throws an error if any of the data is not valid.
    */
-  constructor(name: string, descripcion: string, firstAppearance: FirstAppearance) {
-    name = name.trim();
-    if (name.length == 0) {
+  constructor(
+    name: string,
+    descripcion: string,
+    firstAppearance: FirstAppearance,
+  ) {
+    const trimmedName: string = name.trim();
+    if (trimmedName.length === 0) {
       throw new Error("El nombre del hechizo no puede ser vacío");
     }
-    if (descripcion.trim().length == 0) {
+    if (descripcion.trim().length === 0) {
       throw new Error("La descripción del hechizo no puede ser vacía");
     }
-    if (descripcion.length > 120) {
+    if (descripcion.length > MAX_DESCRIPTION_LENGTH) {
       throw new Error("La descripción no puede superar los 120 caracteres");
     }
     if (!FIRST_APPEARANCES.includes(firstAppearance)) {
       throw new Error("Debe indicar la primera aparición del hechizo");
     }
-    this.Name = name;
+    this.Name = trimmedName;
     this.descripcion = descripcion;
     this.firstAppearance = firstAppearance;
   }
@@ -54,8 +65,8 @@ class Spell {
    *
    * @return {boolean} True if the first appearance was a book.
    */
-  isOriginal() {
-    return this.firstAppearance == "book";
+  isOriginal(): boolean {
+    return this.firstAppearance === "book";
   }
 
   /**
@@ -63,7 +74,7 @@ class Spell {
    *
    * @return {string} The label of the first appearance.
    */
-  getOriginLabel() {
+  getOriginLabel(): string {
     return ORIGIN_LABELS[this.firstAppearance];
   }
 
@@ -72,10 +83,8 @@ class Spell {
    *
    * @return {string} The name, origin and description of the spell.
    */
-  describe() {
-    let text = "";
-    text = `${this.Name} (${this.getOriginLabel()}): ${this.descripcion}`;
-    return text;
+  describe(): string {
+    return `${this.Name} (${this.getOriginLabel()}): ${this.descripcion}`;
   }
 }
 

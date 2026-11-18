@@ -21,7 +21,10 @@ export default defineConfig([
         { max: 50, skipBlankLines: true, skipComments: true },
       ],
       "max-params": ["error", 3],
-
+      "no-template-curly-in-string": "warn",
+      "no-useless-assignment": "warn",
+      "id-length": ["warn",{min: 3}],
+      "no-magic-numbers": ["warn", { ignore: [0, 1] }],
       // Code good practice
       "prefer-const": "error",
       "no-var": "error",
